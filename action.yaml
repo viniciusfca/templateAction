@@ -14,34 +14,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-      # - name: Check out repository
-      #   uses: actions/checkout@v2
-      # - name: Set up Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: 3.9
-      # - name: Install dependencies
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install poetry tomlkit
-      # - name: Update version in pyproject.toml
-      #   run: |
-      #     VERSION=${inputs.tag}
-      #     python -c "import tomlkit; p = tomlkit.parse(open('pyproject.toml').read()); p['tool']['poetry']['version'] = '$VERSION'; open('pyproject.toml', 'w').write(tomlkit.dumps(p))"
-      #     git config --global user.email "actions@github.com"
-      #     git config --global user.name "GitHub Actions"
-      #     git add pyproject.toml
-      #     git commit -m "Update version"
-      #     git push
-  
-      - name: Setup Build
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to the Registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{inputs.username}}
-          password: ${{inputs.password}}
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Update version in pyproject.toml
+        run: |
+          sed -i "s/^version = .*/version = \"${{ inputs.tag }}\"/" pyproject.toml
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add pyproject.toml
+          git commit -m "Update version to ${{ inputs.tag }}"
       
       - name: Set the tag
         shell: bash
@@ -53,9 +34,10 @@ runs:
             echo "final_tag=${{inputs.tag}}" >> $GITHUB_ENV
           fi
       
-      - name: Build and Push the Image
-        uses: docker/build-push-action@v2
+      - name: build image and push to docker hub
+        uses: docker/build-push-action@v1.1.0
         with:
-          context: .
-          push: true
-          tags: viniciusfca/cepapi:${{env.final_tag}}
+          username: viniciusfca
+          password: ${{inputs.password}}
+          repository: viniciusfca/cepapi
+          tags: ${{env.final_tag}}
