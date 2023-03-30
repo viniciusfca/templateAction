@@ -14,25 +14,25 @@ inputs:
 runs:
   using: "composite"
   steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install poetry tomlkit
-      - name: Update version in pyproject.toml
-        run: |
-          VERSION=${inputs.tag}
-          python -c "import tomlkit; p = tomlkit.parse(open('pyproject.toml').read()); p['tool']['poetry']['version'] = '$VERSION'; open('pyproject.toml', 'w').write(tomlkit.dumps(p))"
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add pyproject.toml
-          git commit -m "Update version"
-          git push
+      # - name: Check out repository
+      #   uses: actions/checkout@v2
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.9
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install poetry tomlkit
+      # - name: Update version in pyproject.toml
+      #   run: |
+      #     VERSION=${inputs.tag}
+      #     python -c "import tomlkit; p = tomlkit.parse(open('pyproject.toml').read()); p['tool']['poetry']['version'] = '$VERSION'; open('pyproject.toml', 'w').write(tomlkit.dumps(p))"
+      #     git config --global user.email "actions@github.com"
+      #     git config --global user.name "GitHub Actions"
+      #     git add pyproject.toml
+      #     git commit -m "Update version"
+      #     git push
   
       - name: Setup Build
         uses: docker/setup-buildx-action@v1
