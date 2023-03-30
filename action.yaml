@@ -24,6 +24,7 @@ runs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add pyproject.toml
+          git commit -m 'Update app version ${{inputs.tag}}'
           
       - name: Setup Build
         uses: docker/setup-buildx-action@v1
