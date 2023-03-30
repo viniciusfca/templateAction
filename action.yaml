@@ -1,12 +1,18 @@
-name: CD
-on:
-  push:
-    tags: 
-      - '*'
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+name: "Publish to Docker"
+description: "Build a container image and Pushes it to Docker registry"
+
+inputs:
+  username:
+    description: "Username for image registry"
+    required: true
+  password:
+    description: "Password for image registry"
+    required: true
+ tags:
+    description: "How to tag the image. Default: latest"   
+    
+runs:
+  using: "composite"
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -34,4 +40,4 @@ jobs:
           username: viniciusfca
           password: ${{inputs.DOCKER_PASSWORD}}
           repository: viniciusfca/cepapi
-          tags: ${{ github.ref }}, lastest
+          tags: ${{ inputs.tags }}, lastest
