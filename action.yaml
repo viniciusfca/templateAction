@@ -26,7 +26,7 @@ runs:
           pip install poetry tomlkit
       - name: Update version in pyproject.toml
         run: |
-          VERSION=${inputs.tags}
+          VERSION=${inputs.tag}
           python -c "import tomlkit; p = tomlkit.parse(open('pyproject.toml').read()); p['tool']['poetry']['version'] = '$VERSION'; open('pyproject.toml', 'w').write(tomlkit.dumps(p))"
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
