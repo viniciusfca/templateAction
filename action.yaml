@@ -8,7 +8,7 @@ inputs:
   password:
     description: "Password for image registry"
     required: true
- tags:
+ tag:
     description: "How to tag the image. Default: latest"   
     
 runs:
@@ -40,4 +40,4 @@ runs:
           username: viniciusfca
           password: ${{inputs.DOCKER_PASSWORD}}
           repository: viniciusfca/cepapi
-          tags: ${{ inputs.tags }}, lastest
+          tag: ${{ inputs.tags }}, lastest
