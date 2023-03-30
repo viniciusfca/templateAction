@@ -33,11 +33,29 @@ runs:
           git add pyproject.toml
           git commit -m "Update version"
           git push
+  
+      - name: Setup Build
+        uses: docker/setup-buildx-action@v1
 
-      - name: build image and push to docker hub
-        uses: docker/build-push-action@v1.1.0
+      - name: Login to the Registry
+        uses: docker/login-action@v1
         with:
-          username: viniciusfca
-          password: ${{inputs.DOCKER_PASSWORD}}
-          repository: viniciusfca/cepapi
-          tag: ${{ inputs.tags }}, lastest
+          username: ${{inputs.username}}
+          password: ${{inputs.password}}
+      
+      - name: Set the tag
+        shell: bash
+        run: |
+          if [ -z "${{inputs.tag}}" ]
+          then
+            echo "final_tag=latest" >> $GITHUB_ENV
+          else
+            echo "final_tag=${{inputs.tag}}" >> $GITHUB_ENV
+          fi
+      
+      - name: Build and Push the Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: viniciusfca/cepapi:${{env.final_tag}}
