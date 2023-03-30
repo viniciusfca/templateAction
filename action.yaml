@@ -18,7 +18,6 @@ runs:
         uses: actions/checkout@v2
         
       - name: Update version in pyproject.toml
-        uses: actions/checkout@v2
         shell: bash
         run: |
           sed -i "s/^version = .*/version = \"${{ inputs.tag }}\"/" pyproject.toml
@@ -26,6 +25,7 @@ runs:
           git config --global user.name "GitHub Actions"
           git add pyproject.toml
           git commit -m 'Update app version ${{inputs.tag}}'
+          git branch -a
           git push origin main -f
           
       - name: Setup Build
