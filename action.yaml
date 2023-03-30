@@ -8,8 +8,8 @@ inputs:
   password:
     description: "Password for image registry"
     required: true
- tag:
-    description: "How to tag the image. Default: latest"   
+  tag: 
+    description: "How to tag the image. Default: latest"    
     
 runs:
   using: "composite"
